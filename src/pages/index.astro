@@ -1,5 +1,5 @@
 ---
- // No frontmatter needed for this simple static page
+ // Keep empty – no need for frontmatter here
 ---
 
 <!doctype html>
@@ -8,17 +8,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Foxy Proxy – Browse Anonymously</title>
-    <style is:global>
+    <style>
       :root {
         --primary: #0066ff;
         --hover: #0052cc;
         --bg: #f8f9fa;
         --text: #222;
-        --accent: #ff6b6b;
       }
       body {
         margin: 0;
-        font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+        font-family: system-ui, sans-serif;
         background: var(--bg);
         color: var(--text);
         min-height: 100vh;
@@ -29,101 +28,69 @@
         padding: 2rem 1rem;
         text-align: center;
       }
-      header {
-        margin-bottom: 3rem;
-      }
-      h1 {
-        font-size: 3.5rem;
-        margin: 0 0 0.5rem;
-        color: var(--primary);
-      }
-      .tagline {
-        font-size: 1.4rem;
-        margin: 0 0 2.5rem;
-        color: #555;
-      }
+      h1 { font-size: 3.2rem; margin-bottom: 0.8rem; color: var(--primary); }
+      p { font-size: 1.3rem; margin: 0 0 2rem; max-width: 650px; }
       form {
         display: flex;
         flex-wrap: wrap;
         gap: 1rem;
-        max-width: 800px;
+        max-width: 750px;
         width: 100%;
         justify-content: center;
       }
       input[type="url"] {
         flex: 1;
-        padding: 1.2rem;
-        font-size: 1.3rem;
+        padding: 1.1rem;
+        font-size: 1.2rem;
         border: 2px solid #ccc;
-        border-radius: 12px;
-        min-width: 350px;
-        outline: none;
-      }
-      input[type="url"]:focus {
-        border-color: var(--primary);
-        box-shadow: 0 0 0 3px rgba(0,102,255,0.2);
+        border-radius: 10px;
+        min-width: 300px;
       }
       button {
-        padding: 1.2rem 3rem;
-        font-size: 1.3rem;
+        padding: 1.1rem 2.8rem;
+        font-size: 1.2rem;
         background: var(--primary);
         color: white;
         border: none;
-        border-radius: 12px;
+        border-radius: 10px;
         cursor: pointer;
-        font-weight: 600;
+        font-weight: bold;
       }
-      button:hover {
-        background: var(--hover);
-      }
+      button:hover { background: var(--hover); }
       .note {
-        margin-top: 4rem;
+        margin-top: 3.5rem;
         font-size: 1rem;
-        color: #666;
-        max-width: 700px;
-        line-height: 1.6;
-      }
-      .note a {
-        color: var(--primary);
-        text-decoration: underline;
+        color: #555;
+        max-width: 650px;
       }
     </style>
   </head>
   <body>
-    <header>
-      <h1>Foxy Proxy</h1>
-      <p class="tagline">Enter any URL to browse anonymously and securely — powered by Cloudflare edge proxy.</p>
-    </header>
+    <h1>Foxy Proxy</h1>
+    <p>Enter any URL to browse anonymously and securely — powered by Cloudflare edge proxy.</p>
 
     <form id="proxyForm">
-      <input 
-        type="url" 
-        id="targetUrl" 
-        placeholder="https://example.com" 
-        required 
-        autofocus 
-      />
+      <input type="url" id="targetUrl" placeholder="https://example.com" required autofocus />
       <button type="submit">Launch Proxy →</button>
     </form>
 
     <div class="note">
-      <strong>Quick tips:</strong> Works best for light browsing. Avoid sensitive logins or personal data.<br>
-      Your IP stays hidden — test it by proxying to <a href="#" onclick="document.getElementById('targetUrl').value='https://whatismyipaddress.com'; return false;">whatismyipaddress.com</a>.
+      Quick tips: Works best for light browsing. Avoid sensitive logins or personal data.<br>
+      Your IP stays hidden — test by proxying to <a href="#" onclick="document.getElementById('targetUrl').value='https://whatismyipaddress.com'; return false;">whatismyipaddress.com</a>.
     </div>
 
-    <script>
-      document.getElementById('proxyForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        let url = document.getElementById('targetUrl').value.trim();
-        if (!url) return;
-        if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
-        
-        // IMPORTANT: Match your Worker proxy setup exactly
-        // If Siteproxy uses /secret-pass/ + appended path (no ?url=), change to:
-        // window.location.href = 'https://foxy.iakovf1.com/secret-pass/' + encodeURIComponent(url);
-        const proxyBase = 'https://foxy.iakovf1.com/secret-pass/?url=';
-        window.location.href = proxyBase + encodeURIComponent(url);
-      });
+    <script type="text/javascript">
+      const form = document.getElementById('proxyForm');
+      if (form) {
+        form.addEventListener('submit', function(e) {
+          e.preventDefault();
+          let url = document.getElementById('targetUrl').value.trim();
+          if (!url) return;
+          if (!url.match(/^https?:\/\//i)) url = 'https://' + url;
+          const proxyUrl = 'https://foxy.iakovf1.com/secret-pass/?url=' + encodeURIComponent(url);
+          window.location.href = proxyUrl;
+        });
+      }
     </script>
   </body>
 </html>
