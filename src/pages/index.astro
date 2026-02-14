@@ -1,50 +1,129 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+ // No frontmatter needed for this simple static page
 ---
 
 <!doctype html>
 <html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-	</head>
-	<body>
-		<Header />
-		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This
-				template serves as a lightweight, minimally-styled starting point for anyone looking to build
-				a personal website, blog, or portfolio with Astro.
-			</p>
-			<p>
-				This template comes with a few integrations already configured in your
-				<code>astro.config.mjs</code> file. You can customize your setup with
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/content/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to <a href="https://docs.astro.build/"
-					>read the docs
-				</a> or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out <a
-					href="https://github.com/Charca/astro-blog-template"
-					>astro-blog-template
-				</a> by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
-		</main>
-		<Footer />
-	</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Foxy Proxy – Browse Anonymously</title>
+    <style is:global>
+      :root {
+        --primary: #0066ff;
+        --hover: #0052cc;
+        --bg: #f8f9fa;
+        --text: #222;
+        --accent: #ff6b6b;
+      }
+      body {
+        margin: 0;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem 1rem;
+        text-align: center;
+      }
+      header {
+        margin-bottom: 3rem;
+      }
+      h1 {
+        font-size: 3.5rem;
+        margin: 0 0 0.5rem;
+        color: var(--primary);
+      }
+      .tagline {
+        font-size: 1.4rem;
+        margin: 0 0 2.5rem;
+        color: #555;
+      }
+      form {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        max-width: 800px;
+        width: 100%;
+        justify-content: center;
+      }
+      input[type="url"] {
+        flex: 1;
+        padding: 1.2rem;
+        font-size: 1.3rem;
+        border: 2px solid #ccc;
+        border-radius: 12px;
+        min-width: 350px;
+        outline: none;
+      }
+      input[type="url"]:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(0,102,255,0.2);
+      }
+      button {
+        padding: 1.2rem 3rem;
+        font-size: 1.3rem;
+        background: var(--primary);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        font-weight: 600;
+      }
+      button:hover {
+        background: var(--hover);
+      }
+      .note {
+        margin-top: 4rem;
+        font-size: 1rem;
+        color: #666;
+        max-width: 700px;
+        line-height: 1.6;
+      }
+      .note a {
+        color: var(--primary);
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Foxy Proxy</h1>
+      <p class="tagline">Enter any URL to browse anonymously and securely — powered by Cloudflare edge proxy.</p>
+    </header>
+
+    <form id="proxyForm">
+      <input 
+        type="url" 
+        id="targetUrl" 
+        placeholder="https://example.com" 
+        required 
+        autofocus 
+      />
+      <button type="submit">Launch Proxy →</button>
+    </form>
+
+    <div class="note">
+      <strong>Quick tips:</strong> Works best for light browsing. Avoid sensitive logins or personal data.<br>
+      Your IP stays hidden — test it by proxying to <a href="#" onclick="document.getElementById('targetUrl').value='https://whatismyipaddress.com'; return false;">whatismyipaddress.com</a>.
+    </div>
+
+    <script>
+      document.getElementById('proxyForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        let url = document.getElementById('targetUrl').value.trim();
+        if (!url) return;
+        if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
+        
+        // IMPORTANT: Match your Worker proxy setup exactly
+        // If Siteproxy uses /secret-pass/ + appended path (no ?url=), change to:
+        // window.location.href = 'https://foxy.iakovf1.com/secret-pass/' + encodeURIComponent(url);
+        const proxyBase = 'https://foxy.iakovf1.com/secret-pass/?url=';
+        window.location.href = proxyBase + encodeURIComponent(url);
+      });
+    </script>
+  </body>
 </html>
